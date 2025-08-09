@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChloroVibes - Understand Your Plants</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-section {
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Keyframe animations for form feedback */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+
+        @keyframes glow-success {
+            from { box-shadow: 0 0 10px #68D391, 0 0 20px #68D391, 0 0 30px #68D391; }
+            to { box-shadow: 0 0 20px #68D391, 0 0 30px #68D391, 0 0 40px #68D391; }
+        }
+
+        @keyframes glow-error {
+            from { box-shadow: 0 0 10px #f56565, 0 0 20px #f56565, 0 0 30px #f56565; }
+            to { box-shadow: 0 0 20px #f56565, 0 0 30px #f56565, 0 0 40px #f56565; }
+        }
+
+        .shake-anim { animation: shake 0.5s ease-in-out; }
+        .glow-success-anim { animation: glow-success 1s ease-in-out forwards; }
+        .glow-error-anim { animation: glow-error 1s ease-in-out forwards; }
+        
+        #camera-feed {
+            transform: scaleX(-1); /* Mirror the camera feed for a selfie-view */
+        }
+        
+        .feature-card:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        /* Style for the active navigation link */
+        .nav-link.active {
+            color: #16a34a; /* A darker green */
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header / Navigation Bar -->
+    <header class="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-40">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-green-700">ChloroVibes</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" data-target="home-page" class="nav-link active text-gray-600 hover:text-green-600 transition duration-300">Home</a>
+                <a href="#" data-target="about-page" class="nav-link text-gray-600 hover:text-green-600 transition duration-300">About</a>
+                <a href="#" data-target="features-page" class="nav-link text-gray-600 hover:text-green-600 transition duration-300">Features</a>
+                <!-- Contact Dropdown -->
+                <div class="relative group">
+                    <button class="text-gray-600 hover:text-green-600 transition duration-300 flex items-center">
+                        Contact
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 w-64 z-50 py-2">
+                        <a href="mailto:arjajnair2@gmail.com" class="block px-4 py-2 text-sm text-gray-800 hover:bg-green-100">arjajnair2@gmail.com (CEMP)</a>
+                        <a href="mailto:chandhanavenugopal@gmail.com" class="block px-4 py-2 text-sm text-gray-800 hover:bg-green-100">chandhanavenugopal@gmail.com (CEMP)</a>
+                    </div>
+                </div>
+            </div>
+            <div id="auth-links" class="flex items-center space-x-4">
+                <button id="open-login-btn" class="text-gray-600 hover:text-green-600 font-medium transition duration-300">Login</button>
+                <button id="open-signup-btn" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition duration-300 transform hover:scale-105">
+                    Sign Up
+                </button>
+            </div>
+            <div id="user-info" class="hidden items-center space-x-4">
+                <span id="user-email" class="font-medium text-gray-700"></span>
+                <button id="logout-btn" class="text-gray-600 hover:text-green-600 font-medium transition duration-300">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HOME PAGE CONTENT -->
+        <div id="home-page" class="page-content">
+            <section class="hero-section text-white">
+                <div class="container mx-auto px-6 py-32 text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Listen to Your Plants.</h1>
+                    <p class="text-lg md:text-xl mb-8 max-w-2xl">Discover the secret language of your leafy friends. ChloroVibes analyzes your plant's mood and health, helping you nurture them like never before.</p>
+                    <a href="#" class="bg-green-500 text-white font-bold py-4 px-8 rounded-full hover:bg-green-600 transition duration-300 transform hover:scale-105 inline-block">
+                        Analyze My Plant Now
+                    </a>
+                </div>
+            </section>
+            <section class="py-20 bg-white">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold mb-2">Why ChloroVibes?</h2>
+                    <p class="text-gray-600 mb-12">Everything you need to become a plant whisperer.</p>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div id="mood-analysis-card" class="bg-gray-50 p-8 rounded-xl shadow-lg transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                            <div class="bg-green-200 text-green-700 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Mood Analysis</h3>
+                            <p class="text-gray-600">Use your camera or upload a photo to instantly analyze your plant's emotional state.</p>
+                        </div>
+                        <div class="bg-gray-50 p-8 rounded-xl shadow-lg transform hover:-translate-y-2 transition duration-300">
+                            <div class="bg-green-200 text-green-700 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Health Tracking</h3>
+                            <p class="text-gray-600">Get detailed reports on potential diseases, nutrient deficiencies, and pests before they become a problem.</p>
+                        </div>
+                        <div class="bg-gray-50 p-8 rounded-xl shadow-lg transform hover:-translate-y-2 transition duration-300">
+                            <div class="bg-green-200 text-green-700 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-5.747h18"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Personalized Care</h3>
+                            <p class="text-gray-600">Receive tailored advice on watering schedules, light requirements, and soil type for each of your plants.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ABOUT PAGE CONTENT -->
+        <div id="about-page" class="page-content hidden">
+            <section class="bg-green-50 py-20">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold text-green-800">Our Story</h1>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Connecting you with nature, one plant at a time. Discover the passion and technology behind ChloroVibes.</p>
+                </div>
+            </section>
+            <section class="py-24 bg-white">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=2070&auto=format&fit=crop" alt="Team working with plants" class="rounded-lg shadow-2xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Mission</h2>
+                        <p class="text-gray-600 leading-relaxed mb-4">At ChloroVibes, we believe that plants have a voice. Our mission is to bridge the communication gap between humans and their leafy companions. We combine cutting-edge AI with a deep love for botany to create a world where anyone can understand their plants' needs, fostering a greener, more connected planet.</p>
+                        <p class="text-gray-600 leading-relaxed">We started in a small garage in Malappuram, Kerala, fueled by a simple idea: what if we could ask a plant what it needs? Today, we're a passionate team of engineers, botanists, and designers dedicated to making that idea a reality for plant lovers everywhere.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="py-24 bg-gray-50">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-12">Meet Our Team</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <img class="w-32 h-32 rounded-full mx-auto mb-4" src="https://placehold.co/200x200/a7f3d0/14532d?text=CV" alt="Team Member 1">
+                            <h3 class="text-xl font-bold">Chandhana</h3>
+                            <p class="text-gray-500">Idea generator</p>
+                            <p class="text-gray-600 mt-2">A lifelong botanist with a passion for technology, Chandana leads the vision for ChloroVibes.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <img class="w-32 h-32 rounded-full mx-auto mb-4" src="https://placehold.co/200x200/a7f3d0/14532d?text=CV" alt="Team Member 2">
+                            <h3 class="text-xl font-bold">Arja J Nair</h3>
+                            <p class="text-gray-500">Head of Design</p>
+                            <p class="text-gray-600 mt-2">The brains behind our plant-mood algorithm, Arja turns plant data into actionable insights.</p>
+                        </div>
+                      
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- FEATURES PAGE CONTENT -->
+        <div id="features-page" class="page-content hidden">
+            <section class="bg-green-50 py-20">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold text-green-800">Our Technology</h1>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Explore the powerful features that make ChloroVibes the ultimate plant care companion.</p>
+                </div>
+            </section>
+            <section id="feature-water" class="py-24 bg-white">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 feature-card">
+                    <div class="md:w-1/2">
+                        <img src="c:\Users\Chandhana Venugopal\Downloads\watering image.jpeg" alt="Watering a plant" class="rounded-lg shadow-2xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-blue-200 text-blue-700 rounded-full w-12 h-12 flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800">Watering Intelligence</h2>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">Never guess about watering again. Our AI analyzes your plant's species, pot size, and local humidity to tell you exactly how much water it needs and when. Say goodbye to root rot and dehydration.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="feature-nutrients" class="py-24 bg-gray-50">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 feature-card">
+                    <div class="md:w-1/2">
+                        <img src="c:\Users\Chandhana Venugopal\Downloads\soil_nutrients.jpeg.webp" alt="Adding nutrients to soil" class="rounded-lg shadow-2xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-yellow-200 text-yellow-700 rounded-full w-12 h-12 flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800">Nutrient Analysis</h2>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">By analyzing leaf color and texture, ChloroVibes identifies potential nutrient deficiencies. We provide personalized recommendations for fertilizers and feeding schedules to ensure your plant gets the balanced diet it needs to flourish.</p>
+                    </div>
+                </div>
+            </section>
+             <section id="feature-sunlight" class="py-24 bg-white">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 feature-card">
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1973&auto=format&fit=crop" alt="Sunlight on a plant" class="rounded-lg shadow-2xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-orange-200 text-orange-700 rounded-full w-12 h-12 flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800">Sunlight Placement</h2>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">Is your plant getting too much or too little sun? Use your phone's camera to measure light intensity, and ChloroVibes will guide you to the perfect spot in your home, whether your plant is a sun-worshipper or a shade-dweller.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="feature-soil" class="py-24 bg-gray-50">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 feature-card">
+                    <div class="md:w-1/2">
+                        <img src= "c:\Users\Chandhana Venugopal\Downloads\hndshldng.jpeg" alt="Hands holding soil" class="rounded-lg shadow-2xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-green-200 text-green-700 rounded-full w-12 h-12 flex items-center justify-center">
+                               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H7a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800">Soil Analysis</h2>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">The foundation of a healthy plant is its soil. Our database provides detailed information on the ideal soil composition for thousands of species, including recommendations for aeration, drainage, and pH balance.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="feature-benefits" class="py-24 bg-white">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 feature-card">
+                    <div class="md:w-1/2">
+                        <img src="c:\Users\Chandhana Venugopal\Downloads\rlxng.jpeg" alt="Person relaxing near plants" class="rounded-lg shadow-2xl">
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-red-200 text-red-700 rounded-full w-12 h-12 flex items-center justify-center">
+                               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800">Health & Wellness Benefits</h2>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">Discover the hidden benefits of your plant collection. ChloroVibes identifies your plant and provides information on its air-purifying qualities, humidity-balancing effects, and even its potential to reduce stress and improve focus.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-xl font-bold mb-4">ChloroVibes</p>
+            <p>&copy; 2025 ChloroVibes. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div id="auth-box" class="w-full max-w-md bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 transition-all duration-500 relative">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div id="login-view">
+                <div class="text-center mb-8"><h1 class="text-4xl font-bold text-white">Welcome Back</h1><p class="text-green-200 mt-2">Please sign in to continue</p></div>
+                <form id="login-form">
+                    <div class="mb-4">
+                        <label for="login-email" class="block text-green-200 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="login-email" class="w-full px-4 py-3 bg-gray-700/50 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="login-password" class="block text-green-200 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="login-password" class="w-full px-4 py-3 bg-gray-700/50 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" required>
+                    </div>
+                    <div class="text-right mb-6"><a href="#" id="forgot-password-link" class="text-sm text-green-400 hover:underline">Forgot Password?</a></div>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Sign In</button>
+                    <p id="login-message" class="text-center font-semibold mt-6 h-6"></p>
+                </form>
+                <p class="text-center text-sm text-gray-400 mt-4">Don't have an account? <button id="switch-to-signup" class="font-semibold text-green-400 hover:underline">Sign Up</button></p>
+            </div>
+            <div id="signup-view" class="hidden">
+                 <div class="text-center mb-8"><h1 class="text-4xl font-bold text-white">Create Account</h1><p class="text-green-200 mt-2">Join the ChloroVibes community</p></div>
+                <form id="signup-form">
+                    <div class="mb-4">
+                        <label for="signup-username" class="block text-green-200 text-sm font-bold mb-2">Username</label>
+                        <input type="text" id="signup-username" class="w-full px-4 py-3 bg-gray-700/50 text-white border border-gray-600 rounded-lg" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="signup-email" class="block text-green-200 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="signup-email" class="w-full px-4 py-3 bg-gray-700/50 text-white border border-gray-600 rounded-lg" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="signup-password" class="block text-green-200 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="signup-password" class="w-full px-4 py-3 bg-gray-700/50 text-white border border-gray-600 rounded-lg" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg">Create Account</button>
+                    <p id="signup-message" class="text-center font-semibold mt-6 h-6"></p>
+                </form>
+                <p class="text-center text-sm text-gray-400 mt-4">Already have an account? <button id="switch-to-login" class="font-semibold text-green-400 hover:underline">Login</button></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div id="camera-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex flex-col items-center justify-center p-4">
+        <!-- Camera View -->
+        <div id="camera-view">
+            <video id="camera-feed" class="w-full max-w-2xl rounded-lg" autoplay playsinline></video>
+            <p id="camera-message" class="text-white font-semibold mt-4 text-center"></p>
+        </div>
+        <!-- Results View -->
+        <div id="results-view" class="hidden text-white text-center">
+            <img id="captured-image" src="https://placehold.co/600x400/22c55e/FFFFFF?text=Your+Plant" alt="Captured Plant" class="rounded-lg max-w-sm mx-auto">
+            <h2 id="result-title" class="text-4xl font-bold mt-6"></h2>
+            <p id="result-description" class="text-lg mt-2 max-w-md"></p>
+        </div>
+        <div class="flex items-center space-x-4 mt-6">
+            <button id="capture-btn" class="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition transform hover:scale-105">Capture</button>
+            <button id="scan-again-btn" class="hidden bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition transform hover:scale-105">Scan Again</button>
+            <button id="close-camera-btn" class="bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 transition">Close</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // =================================================================================
+        //
+        //  ↓↓↓ YOUR FIREBASE CONFIGURATION OBJECT HAS BEEN PASTED HERE ↓↓↓
+        //
+        // =================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6MHFAfYQof-gSncRpCxsKtedtE4coNGg",
+            authDomain: "app12-837a3.firebaseapp.com",
+            projectId: "app12-837a3",
+            storageBucket: "app12-837a3.firebasestorage.app",
+            messagingSenderId: "100042977730",
+            appId: "1:100042977730:web:f1da908837052b0b05a65b",
+            measurementId: "G-KS7G820YXX"
+        };
+
+        // This function will run once the entire HTML document is loaded and ready.
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Initialize Firebase
+            let auth, db;
+            try {
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+            } catch (e) {
+                console.error("FIREBASE INITIALIZATION ERROR:", e.message);
+                // Display a more user-friendly error on the page itself
+                const authLinksDiv = document.getElementById('auth-links');
+                if(authLinksDiv) {
+                    authLinksDiv.innerHTML = `<span class="text-red-500 font-bold">App not configured</span>`;
+                }
+                return; // Stop script execution if Firebase isn't configured
+            }
+            
+            // --- DOM ELEMENTS ---
+            const authModal = document.getElementById('auth-modal');
+            const authBox = document.getElementById('auth-box');
+            const openLoginBtn = document.getElementById('open-login-btn');
+            const openSignupBtn = document.getElementById('open-signup-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const authLinks = document.getElementById('auth-links');
+            const userInfo = document.getElementById('user-info');
+            const userEmailEl = document.getElementById('user-email');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            const loginView = document.getElementById('login-view');
+            const signupView = document.getElementById('signup-view');
+
+            const switchToSignupBtn = document.getElementById('switch-to-signup');
+            const switchToLoginBtn = document.getElementById('switch-to-login');
+
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+
+            const loginMessageEl = document.getElementById('login-message');
+            const signupMessageEl = document.getElementById('signup-message');
+            
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            const moodAnalysisCard = document.getElementById('mood-analysis-card');
+
+            // Camera Modal Elements
+            const cameraModal = document.getElementById('camera-modal');
+            const cameraView = document.getElementById('camera-view');
+            const cameraFeed = document.getElementById('camera-feed');
+            const cameraMessage = document.getElementById('camera-message');
+            const resultsView = document.getElementById('results-view');
+            const resultTitle = document.getElementById('result-title');
+            const resultDescription = document.getElementById('result-description');
+            const captureBtn = document.getElementById('capture-btn');
+            const scanAgainBtn = document.getElementById('scan-again-btn');
+            const closeCameraBtn = document.getElementById('close-camera-btn');
+            let cameraStream = null;
+            
+            // --- PLANT MOODS DATA ---
+            const plantMoods = [
+                { title: "😊 Happy!", description: "Looking good! Your plant is thriving with the perfect amount of light and water." },
+                { title: "💧 Needs Water", description: "The soil is dry and the leaves are slightly droopy. It's time to give your plant a drink." },
+                { title: "☀️ Time for Photosynthesis", description: "Your plant is craving some sunlight. Move it to a brighter spot to help it produce energy." },
+                { title: "🐞 Parasite Detected!", description: "Uh oh! I've spotted some tiny pests on the leaves. It's best to treat this quickly." }
+            ];
+
+            // --- UI UPDATE LOGIC ---
+            const updateNavUI = (user) => {
+                if (user) {
+                    authLinks.classList.add('hidden');
+                    userInfo.classList.remove('hidden');
+                    userInfo.classList.add('flex');
+                    userEmailEl.textContent = user.email;
+                } else {
+                    authLinks.classList.remove('hidden');
+                    userInfo.classList.add('hidden');
+                    userInfo.classList.remove('flex');
+                    userEmailEl.textContent = '';
+                }
+            };
+
+            // --- PAGE NAVIGATION LOGIC ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page-content');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+
+                    // Hide all pages
+                    pages.forEach(page => {
+                        page.classList.add('hidden');
+                    });
+
+                    // Show the target page
+                    const targetPage = document.getElementById(targetId);
+                    if (targetPage) {
+                        targetPage.classList.remove('hidden');
+                    }
+
+                    // Update active link style
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    link.classList.add('active');
+                });
+            });
+
+            // --- MODAL AND VIEW SWITCHING LOGIC ---
+            function showModal(view = 'login') {
+                loginMessageEl.textContent = '';
+                signupMessageEl.textContent = '';
+                authBox.classList.remove('shake-anim', 'glow-success-anim', 'glow-error-anim');
+                
+                if (view === 'login') {
+                    loginView.classList.remove('hidden');
+                    signupView.classList.add('hidden');
+                } else {
+                    loginView.classList.add('hidden');
+                    signupView.classList.remove('hidden');
+                }
+                authModal.classList.remove('hidden');
+            }
+
+            openLoginBtn.addEventListener('click', () => showModal('login'));
+            openSignupBtn.addEventListener('click', () => showModal('signup'));
+            closeModalBtn.addEventListener('click', () => authModal.classList.add('hidden'));
+            switchToSignupBtn.addEventListener('click', () => showModal('signup'));
+            switchToLoginBtn.addEventListener('click', () => showModal('login'));
+
+            authModal.addEventListener('click', (event) => {
+                if (event.target === authModal) {
+                    authModal.classList.add('hidden');
+                }
+            });
+
+            // --- CAMERA FEATURE LOGIC ---
+            async function startCamera() {
+                cameraMessage.textContent = 'Requesting camera access...';
+                cameraView.classList.remove('hidden');
+                resultsView.classList.add('hidden');
+                captureBtn.classList.remove('hidden');
+                scanAgainBtn.classList.add('hidden');
+                
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    try {
+                        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                        cameraFeed.srcObject = cameraStream;
+                        cameraModal.classList.remove('hidden');
+                        cameraMessage.textContent = 'Point your camera at the plant.';
+                    } catch (err) {
+                        console.error("Error accessing camera: ", err);
+                        cameraMessage.textContent = "Could not access camera. Please check permissions.";
+                        setTimeout(() => cameraModal.classList.add('hidden'), 3000);
+                    }
+                } else {
+                    alert("Your browser does not support camera access.");
+                }
+            }
+
+            function stopCamera() {
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                }
+                cameraModal.classList.add('hidden');
+            }
+
+            moodAnalysisCard.addEventListener('click', startCamera);
+            closeCameraBtn.addEventListener('click', stopCamera);
+            
+            captureBtn.addEventListener('click', () => {
+                cameraMessage.textContent = 'Analyzing...';
+                
+                // Simulate analysis
+                setTimeout(() => {
+                    const randomIndex = Math.floor(Math.random() * plantMoods.length);
+                    const mood = plantMoods[randomIndex];
+                    
+                    resultTitle.textContent = mood.title;
+                    resultDescription.textContent = mood.description;
+                    
+                    cameraView.classList.add('hidden');
+                    resultsView.classList.remove('hidden');
+                    captureBtn.classList.add('hidden');
+                    scanAgainBtn.classList.remove('hidden');
+                }, 1500);
+            });
+
+            scanAgainBtn.addEventListener('click', startCamera);
+
+            // --- FIREBASE AUTHENTICATION LOGIC ---
+            if (auth) {
+                // Listen for auth state changes
+                auth.onAuthStateChanged(user => {
+                    updateNavUI(user);
+                });
+
+                // Logout
+                logoutBtn.addEventListener('click', () => {
+                    auth.signOut();
+                });
+
+                // Forgot Password
+                forgotPasswordLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    if (!email) {
+                        loginMessageEl.textContent = 'Please enter your email first.';
+                        loginMessageEl.className = 'text-center font-semibold mt-6 h-6 text-red-400';
+                        return;
+                    }
+                    auth.sendPasswordResetEmail(email)
+                        .then(() => {
+                            loginMessageEl.textContent = 'Password reset email sent!';
+                            loginMessageEl.className = 'text-center font-semibold mt-6 h-6 text-blue-400';
+                        })
+                        .catch(error => {
+                            console.error("Forgot Password Error:", error.code, error.message);
+                            loginMessageEl.textContent = error.message;
+                            loginMessageEl.className = 'text-center font-semibold mt-6 h-6 text-red-400';
+                        });
+                });
+
+                // Sign Up
+                signupForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const username = document.getElementById('signup-username').value;
+                    const email = document.getElementById('signup-email').value;
+                    const password = document.getElementById('signup-password').value;
+
+                    authBox.classList.remove('shake-anim', 'glow-error-anim');
+                    signupMessageEl.textContent = 'Creating account...';
+                    signupMessageEl.className = 'text-center font-semibold mt-6 h-6 text-white';
+
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .then(userCredential => {
+                            // Store additional user info in Firestore
+                            return db.collection('users').doc(userCredential.user.uid).set({
+                                username: username,
+                                email: email,
+                                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        })
+                        .then(() => {
+                            signupMessageEl.textContent = 'Account created! Please log in.';
+                            signupMessageEl.classList.add('text-green-400');
+                            setTimeout(() => showModal('login'), 2000);
+                        })
+                        .catch(error => {
+                            console.error("Sign Up Error:", error.code, error.message);
+                            signupMessageEl.textContent = error.message;
+                            signupMessageEl.classList.add('text-red-400');
+                            authBox.classList.add('shake-anim', 'glow-error-anim');
+                        });
+                });
+
+                // Login
+                loginForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    authBox.classList.remove('shake-anim', 'glow-success-anim', 'glow-error-anim');
+                    loginMessageEl.textContent = 'Signing in...';
+                    loginMessageEl.className = 'text-center font-semibold mt-6 h-6 text-white';
+
+                    auth.signInWithEmailAndPassword(email, password)
+                        .then(userCredential => {
+                            loginMessageEl.textContent = 'Login Successful!';
+                            loginMessageEl.classList.add('text-green-400');
+                            authBox.classList.add('glow-success-anim');
+                            setTimeout(() => authModal.classList.add('hidden'), 1500);
+                        })
+                        .catch(error => {
+                            console.error("Login Error:", error.code, error.message);
+                            loginMessageEl.textContent = error.message;
+                            loginMessageEl.classList.add('text-red-400');
+                            authBox.classList.add('shake-anim', 'glow-error-anim');
+                        });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
